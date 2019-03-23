@@ -161,7 +161,7 @@ dbt3-$TAG-time-statistics -s -n $TASK || exit 1
 if [ $NO_REFRESH -eq 0 ]; then
 	echo "`date`: Power Test : Starting Refresh Stream 1"
 	s_time=`date +%s`
-	dbt3-$TAG-rf1 $SCALE_FACTOR > $RESULTSDIR/rf1.txt 2>&1
+	dbt3-$TAG-rf1 $SCALE_FACTOR > $RESULTSDIR/rf1.txt 2>$RESULTSDIR/rf1.err
 	DATASET=$?
 	if [ $DATASET -lt 1 ]; then
 		exit 1
@@ -195,11 +195,11 @@ __EOF__
 	dbt3-$TAG-time-statistics -s -n $TASK || exit 1
 	if [ $MPP -eq 0 ]; then
 		eval $PERFCOMMAND $DBCMD << __EOF__ \
-				>> $RESULTSDIR/$N.txt 2>> $OUTPUT_DIR/power.txt
+				>> $RESULTSDIR/$N.txt 2>> $OUTPUT_DIR/power.err
 ${Q}
 __EOF__
 	else
-		$DBCMD << __EOF__ > $RESULTSDIR/$N.txt 2>> $OUTPUT_DIR/power.txt
+		$DBCMD << __EOF__ > $RESULTSDIR/$N.txt 2>> $OUTPUT_DIR/power.err
 ${Q}
 __EOF__
 	fi
@@ -221,7 +221,7 @@ if [ $NO_REFRESH -eq 0 ]; then
 	# Refresh Stream 2
 	echo "`date`: Power Test : Starting Refresh Stream 2"
 	s_time=`date +%s`
-	dbt3-$TAG-rf2 $DATASET > $RESULTSDIR/rf2.txt 2>&1 || exit 1
+	dbt3-$TAG-rf2 $DATASET > $RESULTSDIR/rf2.txt 2>$RESULTSDIR/rf2.err || exit 1
 	e_time=`date +%s`
 	echo "`date`: Power Test : Refresh Stream 2 completed."
 	diff_time=$(( $e_time - $s_time ))
@@ -321,3 +321,7 @@ if [ $EXPLAIN -eq 1 ]; then
 	done
 	sort -n -t "," -k 2 -r -o $DISASTERCSV $DISASTERCSV
 fi
+
+ls -l $RESULTSDIR/*.err
+
+[ -n "$RESULTSDIR/*.err" ] && echo Errors found && exit 4
