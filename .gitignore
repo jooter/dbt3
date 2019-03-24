@@ -5,6 +5,7 @@
 
 1/
 2/
+pgdata/
 mydata/
 compile
 Makefile

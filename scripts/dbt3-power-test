@@ -78,7 +78,7 @@ if [ $DATABASE = "monetdb" ]; then
 elif [ $DATABASE = "pgsql" ] || [ $DATABASE = "pgxl" ]; then
 	DBCMD="psql -v ON_ERROR_STOP=1 -X -e"
 elif [ $DATABASE = "mysql" ]; then
-	DBCMD="mysql -u root -D $DBNAME"
+	DBCMD="mysql -u root -D $DBNAME -vvv"
 elif [ $DATABASE = "virtuoso" ]; then
 	DBCMD="isql PROMPT=OFF ERRORS=STDOUT ECHO=ON VERBOSE=OFF"
 else
