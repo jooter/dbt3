@@ -13,7 +13,7 @@ export QGEN=$DSS_CONFIG/qgen
 export PGDATABASE=dbt3
 
 export PATH=/opt/pgsql-10/bin:$PATH
-export PGDATA=$DBT3_HOME/mydata
+export PGDATA=$DBT3_HOME/pgdata
 
 export DSS_QUERY=$DBT3_HOME/queries/pgsql
 export PATH=$DBT3_HOME/scripts/pgsql:$PATH
